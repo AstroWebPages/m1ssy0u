@@ -1,483 +1,514 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TheEnd¿</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: #000;
-            overflow: hidden;
-            height: 100vh;
-        }
-
-        .glitch-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #ff0080, #8000ff, #00ff80, #ff8000, #0080ff, #ff0040, #ff00ff, #00ffff, #ffff00, #ff4000, #4000ff, #ff0040);
-            background-size: 800% 800%;
-            animation: hyperGradient 0.02s linear infinite;
-        }
-
-        .glitch-layer-1 {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                repeating-linear-gradient(
-                    90deg,
-                    rgba(255, 0, 255, 1) 0px,
-                    transparent 1px,
-                    rgba(0, 255, 255, 1) 2px,
-                    transparent 3px,
-                    rgba(255, 255, 0, 1) 4px,
-                    transparent 5px
-                );
-            animation: aggressiveScan 0.01s linear infinite;
-            mix-blend-mode: screen;
-        }
-
-        .glitch-layer-2 {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                repeating-linear-gradient(
-                    0deg,
-                    rgba(255, 255, 0, 1) 0px,
-                    rgba(255, 0, 0, 1) 1px,
-                    rgba(0, 255, 0, 1) 2px,
-                    rgba(0, 0, 255, 1) 3px
-                );
-            animation: verticalGlitch 0.008s linear infinite;
-            mix-blend-mode: multiply;
-        }
-
-        .digital-corruption {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(255, 0, 255, 1) 0%, transparent 30%),
-                radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 1) 0%, transparent 30%),
-                radial-gradient(circle at 40% 40%, rgba(255, 255, 0, 1) 0%, transparent 30%),
-                radial-gradient(circle at 60% 60%, rgba(255, 0, 0, 1) 0%, transparent 30%),
-                radial-gradient(circle at 10% 10%, rgba(0, 255, 0, 1) 0%, transparent 30%),
-                radial-gradient(circle at 90% 90%, rgba(0, 0, 255, 1) 0%, transparent 30%);
-            animation: corruptionPulse 0.015s ease-in-out infinite;
-            mix-blend-mode: difference;
-        }
-
-        .block-noise {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .noise-block {
-            position: absolute;
-            animation: blockFlicker infinite;
-        }
-
-        .rgb-split {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                rgba(255, 0, 0, 1) 0%, 
-                rgba(255, 0, 0, 1) 16.66%, 
-                rgba(0, 255, 0, 1) 16.66%, 
-                rgba(0, 255, 0, 1) 33.33%, 
-                rgba(0, 0, 255, 1) 33.33%, 
-                rgba(0, 0, 255, 1) 50%, 
-                rgba(255, 255, 0, 1) 50%, 
-                rgba(255, 255, 0, 1) 66.66%, 
-                rgba(255, 0, 255, 1) 66.66%, 
-                rgba(255, 0, 255, 1) 83.33%, 
-                rgba(0, 255, 255, 1) 83.33%, 
-                rgba(0, 255, 255, 1) 100%);
-            animation: rgbSplit 0.005s linear infinite;
-            mix-blend-mode: overlay;
-        }
-
-        .static-noise {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.9;
-            background-image: 
-                radial-gradient(circle, rgba(255,255,255,1) 1px, transparent 1px),
-                radial-gradient(circle, rgba(255,0,255,1) 1px, transparent 1px),
-                radial-gradient(circle, rgba(0,255,255,1) 1px, transparent 1px);
-            background-size: 2px 2px, 3px 3px, 4px 4px;
-            animation: staticShake 0.003s infinite;
-        }
-
-        .color-inversion {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                linear-gradient(45deg, transparent 48%, #fff 49%, #fff 51%, transparent 52%),
-                linear-gradient(-45deg, transparent 48%, #000 49%, #000 51%, transparent 52%);
-            animation: colorInvert 0.06s infinite;
-            mix-blend-mode: exclusion;
-        }
-
-        @keyframes hyperGradient {
-            0% { background-position: 0% 0%; filter: hue-rotate(0deg) saturate(1000%) contrast(500%) brightness(300%); }
-            5% { background-position: 100% 100%; filter: hue-rotate(18deg) saturate(800%) contrast(800%) brightness(150%); }
-            10% { background-position: 50% 0%; filter: hue-rotate(36deg) saturate(1200%) contrast(300%) brightness(400%); }
-            15% { background-position: 0% 50%; filter: hue-rotate(54deg) saturate(600%) contrast(900%) brightness(200%); }
-            20% { background-position: 100% 50%; filter: hue-rotate(72deg) saturate(1500%) contrast(400%) brightness(500%); }
-            25% { background-position: 50% 100%; filter: hue-rotate(90deg) saturate(400%) contrast(1000%) brightness(100%); }
-            30% { background-position: 0% 100%; filter: hue-rotate(108deg) saturate(1800%) contrast(200%) brightness(600%); }
-            35% { background-position: 100% 0%; filter: hue-rotate(126deg) saturate(300%) contrast(700%) brightness(250%); }
-            40% { background-position: 25% 75%; filter: hue-rotate(144deg) saturate(2000%) contrast(600%) brightness(450%); }
-            45% { background-position: 75% 25%; filter: hue-rotate(162deg) saturate(500%) contrast(400%) brightness(350%); }
-            50% { background-position: 0% 0%; filter: hue-rotate(180deg) saturate(1600%) contrast(800%) brightness(180%); }
-            55% { background-position: 100% 100%; filter: hue-rotate(198deg) saturate(700%) contrast(300%) brightness(520%); }
-            60% { background-position: 50% 0%; filter: hue-rotate(216deg) saturate(1300%) contrast(900%) brightness(280%); }
-            65% { background-position: 0% 50%; filter: hue-rotate(234deg) saturate(900%) contrast(500%) brightness(380%); }
-            70% { background-position: 100% 50%; filter: hue-rotate(252deg) saturate(1100%) contrast(700%) brightness(150%); }
-            75% { background-position: 50% 100%; filter: hue-rotate(270deg) saturate(1400%) contrast(400%) brightness(480%); }
-            80% { background-position: 0% 100%; filter: hue-rotate(288deg) saturate(800%) contrast(600%) brightness(320%); }
-            85% { background-position: 100% 0%; filter: hue-rotate(306deg) saturate(1700%) contrast(200%) brightness(420%); }
-            90% { background-position: 25% 75%; filter: hue-rotate(324deg) saturate(600%) contrast(1000%) brightness(250%); }
-            95% { background-position: 75% 25%; filter: hue-rotate(342deg) saturate(1900%) contrast(300%) brightness(550%); }
-            100% { background-position: 0% 0%; filter: hue-rotate(360deg) saturate(1000%) contrast(500%) brightness(300%); }
-        }
-
-        @keyframes aggressiveScan {
-            0% { transform: translateY(0) scaleX(1) scaleY(1); }
-            5% { transform: translateY(-200vh) scaleX(3) scaleY(0.1); }
-            10% { transform: translateY(150vh) scaleX(0.2) scaleY(4); }
-            15% { transform: translateY(-100vh) scaleX(5) scaleY(0.05); }
-            20% { transform: translateY(250vh) scaleX(0.1) scaleY(8); }
-            25% { transform: translateY(-150vh) scaleX(4) scaleY(0.2); }
-            30% { transform: translateY(100vh) scaleX(0.3) scaleY(6); }
-            35% { transform: translateY(-250vh) scaleX(6) scaleY(0.08); }
-            40% { transform: translateY(200vh) scaleX(0.15) scaleY(10); }
-            45% { transform: translateY(-50vh) scaleX(2) scaleY(0.3); }
-            50% { transform: translateY(300vh) scaleX(0.05) scaleY(12); }
-            55% { transform: translateY(-300vh) scaleX(8) scaleY(0.03); }
-            60% { transform: translateY(50vh) scaleX(0.4) scaleY(5); }
-            65% { transform: translateY(-200vh) scaleX(7) scaleY(0.1); }
-            70% { transform: translateY(180vh) scaleX(0.2) scaleY(9); }
-            75% { transform: translateY(-80vh) scaleX(3) scaleY(0.15); }
-            80% { transform: translateY(120vh) scaleX(0.6) scaleY(7); }
-            85% { transform: translateY(-180vh) scaleX(4) scaleY(0.12); }
-            90% { transform: translateY(80vh) scaleX(0.8) scaleY(3); }
-            95% { transform: translateY(-120vh) scaleX(2.5) scaleY(0.25); }
-            100% { transform: translateY(0) scaleX(1) scaleY(1); }
-        }
-
-        @keyframes verticalGlitch {
-            0% { transform: translateX(0); }
-            10% { transform: translateX(-20px) skewX(10deg); }
-            20% { transform: translateX(15px) skewX(-15deg); }
-            30% { transform: translateX(-10px) skewX(5deg); }
-            40% { transform: translateX(25px) skewX(-20deg); }
-            50% { transform: translateX(-15px) skewX(15deg); }
-            60% { transform: translateX(20px) skewX(-10deg); }
-            70% { transform: translateX(-25px) skewX(20deg); }
-            80% { transform: translateX(10px) skewX(-5deg); }
-            90% { transform: translateX(-20px) skewX(25deg); }
-            100% { transform: translateX(0); }
-        }
-
-        @keyframes corruptionPulse {
-            0% { transform: scale(1) rotate(0deg); opacity: 1; }
-            25% { transform: scale(1.5) rotate(90deg); opacity: 0.7; }
-            50% { transform: scale(0.5) rotate(180deg); opacity: 1; }
-            75% { transform: scale(2) rotate(270deg); opacity: 0.3; }
-            100% { transform: scale(1) rotate(360deg); opacity: 1; }
-        }
-
-        @keyframes blockFlicker {
-            0%, 5% { opacity: 1; background: #ff00ff; }
-            6%, 10% { opacity: 0; background: #00ffff; }
-            11%, 15% { opacity: 1; background: #ffff00; }
-            16%, 20% { opacity: 0; background: #ff0080; }
-            21%, 25% { opacity: 1; background: #8000ff; }
-            26%, 30% { opacity: 0; background: #00ff80; }
-            31%, 100% { opacity: 0; }
-        }
-
-        @keyframes rgbSplit {
-            0% { transform: translateX(0); }
-            20% { transform: translateX(-10px); }
-            40% { transform: translateX(15px); }
-            60% { transform: translateX(-5px); }
-            80% { transform: translateX(8px); }
-            100% { transform: translateX(0); }
-        }
-
-        @keyframes staticShake {
-            0% { transform: translate(0); }
-            10% { transform: translate(-2px, 2px); }
-            20% { transform: translate(2px, -2px); }
-            30% { transform: translate(-2px, -2px); }
-            40% { transform: translate(2px, 2px); }
-            50% { transform: translate(-1px, 1px); }
-            60% { transform: translate(1px, -1px); }
-            70% { transform: translate(-1px, -1px); }
-            80% { transform: translate(1px, 1px); }
-            90% { transform: translate(-1px, 1px); }
-            100% { transform: translate(0); }
-        }
-
-        @keyframes ultraSpin {
-            0% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(90deg) scale(2); }
-            50% { transform: rotate(180deg) scale(0.5); }
-            75% { transform: rotate(270deg) scale(1.5); }
-            100% { transform: rotate(360deg) scale(1); }
-        }
-
-        @keyframes seizureFlash {
-            0% { opacity: 1; filter: invert(0) contrast(100%); }
-            25% { opacity: 0; filter: invert(1) contrast(1000%); }
-            50% { opacity: 1; filter: invert(0) contrast(2000%); }
-            75% { opacity: 0; filter: invert(1) contrast(500%); }
-            100% { opacity: 1; filter: invert(0) contrast(100%); }
-        }
-
-        .extreme-distortion {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            animation: extremeDistort 0.008s infinite;
-            mix-blend-mode: hard-light;
-        }
-
-        .ultra-chaos {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                conic-gradient(from 0deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080, #ff0000);
-            animation: ultraSpin 0.01s linear infinite;
-            mix-blend-mode: color-dodge;
-        }
-
-        .seizure-trigger {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-conic-gradient(
-                from 0deg at 50% 50%,
-                #ffffff 0deg,
-                #000000 1deg,
-                #ff0000 2deg,
-                #00ff00 3deg,
-                #0000ff 4deg,
-                #ffffff 5deg
-            );
-            animation: seizureFlash 0.004s infinite;
-            mix-blend-mode: exclusion;
-        }
-
-        @keyframes extremeDistort {
-            0% { 
-                filter: blur(0px) brightness(100%) contrast(100%); 
-                transform: scale(1); 
-            }
-            10% { 
-                filter: blur(5px) brightness(300%) contrast(500%); 
-                transform: scale(1.1) skewX(10deg); 
-            }
-            20% { 
-                filter: blur(2px) brightness(50%) contrast(800%); 
-                transform: scale(0.9) skewY(-15deg); 
-            }
-            30% { 
-                filter: blur(8px) brightness(400%) contrast(200%); 
-                transform: scale(1.2) rotate(5deg); 
-            }
-            40% { 
-                filter: blur(1px) brightness(150%) contrast(600%); 
-                transform: scale(0.8) skewX(-20deg); 
-            }
-            50% { 
-                filter: blur(10px) brightness(500%) contrast(300%); 
-                transform: scale(1.3) skewY(10deg); 
-            }
-            60% { 
-                filter: blur(3px) brightness(80%) contrast(700%); 
-                transform: scale(0.95) rotate(-8deg); 
-            }
-            70% { 
-                filter: blur(6px) brightness(350%) contrast(400%); 
-                transform: scale(1.15) skewX(15deg); 
-            }
-            80% { 
-                filter: blur(1px) brightness(200%) contrast(900%); 
-                transform: scale(0.85) skewY(-5deg); 
-            }
-            90% { 
-                filter: blur(4px) brightness(450%) contrast(150%); 
-                transform: scale(1.25) rotate(12deg); 
-            }
-            100% { 
-                filter: blur(0px) brightness(100%) contrast(100%); 
-                transform: scale(1); 
-            }
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="user-scalable=no">
+  <title>TheEnd¿</title>
+  <style>
+    body { background:#131115; overflow-x:hidden; overflow-y:hidden; margin:0; }
+    #c1 { background:#fbf7fe; position:fixed; left:0; top:0; }
+    #btn { position:fixed; left:0; top:0; }
+    #main { transform-origin:0 0; position:fixed; left:0; top:0; }
+    #config { position:fixed; left:0; top:30px; display:none; }
+    /* contador duplicación */
+    #dup-info {
+      position:fixed; right:10px; bottom:10px;
+      background:rgba(0,0,0,0.6); color:#fff; padding:8px 12px;
+      border-radius:8px; font-family:sans-serif;
+    }
+  </style>
 </head>
 <body>
-    <div class="glitch-container">
-        <div class="ultra-chaos"></div>
-        <div class="seizure-trigger"></div>
-        <div class="glitch-layer-1"></div>
-        <div class="glitch-layer-2"></div>
-        <div class="digital-corruption"></div>
-        <div class="rgb-split"></div>
-        <div class="static-noise"></div>
-        <div class="color-inversion"></div>
-        <div class="extreme-distortion"></div>
-        <div class="block-noise" id="blockNoise"></div>
-    </div>
+  <div id="main">
+    <canvas id="c1" width="1024" height="1024"><span>不支持canvas浏览器</span></canvas>
+  </div>
+  <button id="btn">CONFIG</button>
+  <div id="config">
+    <textarea id="kernel" cols="30" rows="10"></textarea><br>
+    <button id="apply">APPLY</button>
+    <button id="cancle">CANCEL</button>
+  </div>
+  <div id="dup-info">
+    Abriendo copia en <span id="open">5</span>s<br>
+    Cerrando esta en <span id="close">10</span>s
+  </div>
 
-    <script>
-        // Generar bloques de ruido extremadamente agresivos
-        function createAggressiveNoise() {
-            const container = document.getElementById('blockNoise');
-            
-            for (let i = 0; i < 200; i++) {
-                const block = document.createElement('div');
-                block.className = 'noise-block';
-                
-                // Posición y tamaño aleatorios
-                block.style.left = Math.random() * 100 + '%';
-                block.style.top = Math.random() * 100 + '%';
-                block.style.width = Math.random() * 100 + 20 + 'px';
-                block.style.height = Math.random() * 50 + 10 + 'px';
-                
-                // Duración y delay aleatorios ultra rápidos
-                block.style.animationDuration = (Math.random() * 0.05 + 0.02) + 's';
-                block.style.animationDelay = Math.random() * 0.1 + 's';
-                
-                container.appendChild(block);
+  <script>
+  /* =============================
+     SCRIPT DE DUPLICACIÓN
+  ==============================*/
+  (function(){
+    let openSec = 5;
+    let closeSec = 10;
+
+    const openEl = document.getElementById('open');
+    const closeEl = document.getElementById('close');
+
+    const timer = setInterval(() => {
+      openSec--;
+      closeSec--;
+      openEl.textContent = openSec >= 0 ? openSec : 0;
+      closeEl.textContent = closeSec >= 0 ? closeSec : 0;
+
+      if (openSec === 0) {
+        window.open(window.location.href, '_blank');
+      }
+      if (closeSec === 0) {
+        clearInterval(timer);
+        window.close();
+      }
+    }, 1000);
+  })();
+  </script>
+
+  <!-- =============================
+       TU SCRIPT DE SHADER COMPLETO
+  ==============================-->
+  <script>
+  var cx, cy;
+  var glposition;
+  var glright;
+  var glforward;
+  var glup;
+  var glorigin;
+  var glx;
+  var gly;
+  var gllen;
+  var canvas;
+  var gl;
+  var date = new Date();
+  var md = 0,mx,my;
+  var t2,t1 = date.getTime();
+  var mx = 0, my = 0, mx1 = 0, my1 = 0, lasttimen = 0;
+  var ml = 0, mr = 0, mm = 0;
+  var len = 1.6;
+  var ang1 = 2.8;
+  var ang2 = 0.4;
+  var cenx = 0.0;
+  var ceny = 0.0;
+  var cenz = 0.0;
+  var KERNEL = "float kernal(vec3 ver){\n" +
+      "   vec3 a;\n" +
+      "float b,c,d,e;\n" +
+      "   a=ver;\n" +
+      "   for(int i=0;i<5;i++){\n" +
+      "       b=length(a);\n" +
+      "       c=atan(a.y,a.x)*8.0;\n" +
+      "       e=1.0/b;\n" +
+      "       d=acos(a.z/b)*8.0;\n" +
+      "       b=pow(b,8.0);\n" +
+      "       a=vec3(b*sin(d)*cos(c),b*sin(d)*sin(c),b*cos(d))+ver;\n" +
+      "       if(b>6.0){\n" +
+      "           break;\n" +
+      "       }\n" +
+      "   }" +
+      "   return 4.0-a.x*a.x-a.y*a.y-a.z*a.z;" +
+      "}";
+  var vertshade;
+  var fragshader;
+  var shaderProgram;
+  function ontimer() {
+      ang1+=0.01;
+      draw();
+      window.requestAnimationFrame(ontimer);
+  }
+
+    document.addEventListener("mousedown",
+        function (ev) {
+            var oEvent = ev || event;
+            if (oEvent.button == 0) {
+                ml = 1;
+                mm = 0;
+            }
+            if (oEvent.button == 2) {
+                mr = 1;
+                mm = 0;
+            }
+            mx = oEvent.clientX;
+            my = oEvent.clientY;
+        },
+        false);
+    document.addEventListener("mouseup",
+        function (ev) {
+            var oEvent = ev || event;
+            if (oEvent.button == 0) {
+                ml = 0;
+            }
+            if (oEvent.button == 2) {
+                mr = 0;
+            }
+        },
+        false);
+    document.addEventListener("mousemove",
+        function (ev) {
+        var oEvent = ev || event;
+        if (ml == 1) {
+            ang1 += (oEvent.clientX - mx) * 0.002;
+            ang2 += (oEvent.clientY - my) * 0.002;
+            if (oEvent.clientX != mx || oEvent.clientY != my) {
+                mm = 1;
             }
         }
-
-        // Glitch extremo con cambios de filtros aleatorios
-        function extremeRandomGlitch() {
-            const container = document.querySelector('.glitch-container');
-            const filters = [
-                'hue-rotate(180deg) saturate(500%)',
-                'invert(1) contrast(300%)',
-                'brightness(300%) contrast(800%)',
-                'sepia(1) hue-rotate(290deg) saturate(400%)',
-                'grayscale(1) contrast(500%)',
-                'blur(3px) brightness(400%)',
-                'saturate(1000%) contrast(200%)',
-                'hue-rotate(90deg) invert(0.5)'
-            ];
-            
-            setInterval(() => {
-                if (Math.random() > 0.1) {
-                    const randomFilter = filters[Math.floor(Math.random() * filters.length)];
-                    container.style.filter = randomFilter;
-                    
-                    // Cambiar transform también - MÁS EXTREMO
-                    container.style.transform = `
-                        scale(${0.3 + Math.random() * 1.4}) 
-                        skew(${Math.random() * 40 - 20}deg, ${Math.random() * 40 - 20}deg)
-                        rotate(${Math.random() * 180 - 90}deg)
-                    `;
-                    
-                    setTimeout(() => {
-                        container.style.filter = 'none';
-                        container.style.transform = 'none';
-                    }, Math.random() * 20 + 5);
-                }
-            }, 5);
+        if (mr == 1) {
+            var l = len * 4.0 / (cx + cy);
+            cenx += l * (-(oEvent.clientX - mx) * Math.sin(ang1) - (oEvent.clientY - my) * Math.sin(ang2) * Math.cos(ang1));
+            ceny += l * ((oEvent.clientY - my) * Math.cos(ang2));
+            cenz += l * ((oEvent.clientX - mx) * Math.cos(ang1) - (oEvent.clientY - my) * Math.sin(ang2) * Math.sin(ang1));
+            if (oEvent.clientX != mx || oEvent.clientY != my) {
+                mm = 1;
+            }
         }
-
-        // Parpadeo RGB extremo
-        function rgbFlash() {
-            const body = document.body;
-            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ff00ff', '#00ffff', '#ffff00'];
-            
-            setInterval(() => {
-                if (Math.random() > 0.7) {
-                    body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    setTimeout(() => {
-                        body.style.backgroundColor = '#000';
-                    }, Math.random() * 30 + 5);
-                }
-            }, 15);
+        mx = oEvent.clientX;
+        my = oEvent.clientY;
+        },
+        false);
+    document.addEventListener("mousewheel",
+        function (ev) {
+            ev.preventDefault();
+            var oEvent = ev || event;
+            len *= Math.exp(-0.001 * oEvent.wheelDelta);
+        },
+        false);
+    document.addEventListener("touchstart",
+        function (ev) {
+            var n = ev.touches.length;
+            if (n == 1) {
+                var oEvent = ev.touches[0];
+                mx = oEvent.clientX;
+                my = oEvent.clientY;
+            }
+            else if (n == 2) {
+                var oEvent = ev.touches[0];
+                mx = oEvent.clientX;
+                my = oEvent.clientY;
+                oEvent = ev.touches[1];
+                mx1 = oEvent.clientX;
+                my1 = oEvent.clientY;
+            }
+            lasttimen = n;
+        },
+        false);
+    document.addEventListener("touchend",
+        function (ev) {
+            var n = ev.touches.length;
+            if (n == 1) {
+                var oEvent = ev.touches[0];
+                mx = oEvent.clientX;
+                my = oEvent.clientY;
+            }
+            else if (n == 2) {
+                var oEvent = ev.touches[0];
+                mx = oEvent.clientX;
+                my = oEvent.clientY;
+                oEvent = ev.touches[1];
+                mx1 = oEvent.clientX;
+                my1 = oEvent.clientY;
+            }
+            lasttimen = n;
+        },
+        false);
+    document.addEventListener("touchmove",
+        function (ev) {
+            ev.preventDefault();
+            var n = ev.touches.length;
+            if (n == 1&&lasttimen==1) {
+                var oEvent = ev.touches[0];
+                ang1 += (oEvent.clientX - mx) * 0.002;
+                ang2 += (oEvent.clientY - my) * 0.002;
+                mx = oEvent.clientX;
+                my = oEvent.clientY;
+            }
+            else if (n == 2) {
+                var oEvent = ev.touches[0];
+                var oEvent1 = ev.touches[1];
+                var l = len * 2.0 / (cx + cy), l1;
+                cenx += l * (-(oEvent.clientX + oEvent1.clientX - mx - mx1) * Math.sin(ang1) - (oEvent.clientY + oEvent1.clientY - my - my1) * Math.sin(ang2) * Math.cos(ang1));
+                ceny += l * ((oEvent.clientY + oEvent1.clientY - my - my1) * Math.cos(ang2));
+                cenz += l * ((oEvent.clientX + oEvent1.clientX - mx - mx1) * Math.cos(ang1) - (oEvent.clientY + oEvent1.clientY - my - my1) * Math.sin(ang2) * Math.sin(ang1));
+                l1 = Math.sqrt((mx - mx1) * (mx - mx1) + (my - my1) * (my - my1)+1.0);
+                mx = oEvent.clientX;
+                my = oEvent.clientY;
+                mx1 = oEvent1.clientX;
+                my1 = oEvent1.clientY;
+                l = Math.sqrt((mx - mx1) * (mx - mx1) + (my - my1) * (my - my1) + 1.0);
+                len *= l1 / l;
+            }
+            lasttimen = n;
+        },
+        false);
+    document.oncontextmenu = function (event) {
+        if (mm == 1) {
+            event.preventDefault();
         }
-
-        // Distorsión de viewport
-        function viewportGlitch() {
-            const html = document.documentElement;
-            
-            setInterval(() => {
-                if (Math.random() > 0.8) {
-                    html.style.transform = `scale(${0.9 + Math.random() * 0.2}) rotate(${Math.random() * 4 - 2}deg)`;
-                    setTimeout(() => {
-                        html.style.transform = 'none';
-                    }, Math.random() * 100 + 20);
-                }
-            }, 50);
+    };
+    function draw() {
+        date = new Date();
+        var t2 = date.getTime();
+        //ang1 += (t2 - t1)*0.001;
+        t1 = t2;
+        //ang1 += 0.1;
+        gl.uniform1f(glx, cx * 2.0 / (cx + cy));
+        gl.uniform1f(gly, cy * 2.0 / (cx + cy));
+        gl.uniform1f(gllen, len);
+        gl.uniform3f(glorigin, len * Math.cos(ang1) * Math.cos(ang2) + cenx, len * Math.sin(ang2) + ceny, len * Math.sin(ang1) * Math.cos(ang2) + cenz);
+        gl.uniform3f(glright, Math.sin(ang1), 0, -Math.cos(ang1));
+        gl.uniform3f(glup, -Math.sin(ang2) * Math.cos(ang1), Math.cos(ang2), -Math.sin(ang2) * Math.sin(ang1));
+        gl.uniform3f(glforward, -Math.cos(ang1) * Math.cos(ang2), -Math.sin(ang2), -Math.sin(ang1) * Math.cos(ang2));
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        gl.finish();
+    }
+    window.onresize = function () {
+        cx = document.body.clientWidth;
+        cy = document.body.clientHeight;
+        if(cx>cy){
+            cx=cy;
         }
-
-        // Auto-cierre de página después de 10 segundos
-        function autoClosePage() {
-            setTimeout(() => {
-                try {
-                    // Intentar cerrar la pestaña/ventana
-                    window.close();
-                } catch (e) {
-                    // Si no se puede cerrar, redirigir a página en blanco
-                    window.location.href = 'about:blank';
-                }
-            }, 10000); // 10 segundos
+        else{
+            cy=cx;
         }
+        document.getElementById("main").style.width=1024+"px";
+        document.getElementById("main").style.height=1024+"px";
+        document.getElementById("main").style.transform="scale("+cx/1024+","+cy/1024+")";
+    }
+    window.onload = function () {
+        cx = document.body.clientWidth;
+        cy = document.body.clientHeight;
+        if(cx>cy){
+            cx=cy;
+        }
+        else{
+            cy=cx;
+        }
+        document.getElementById("main").style.width=1024+"px";
+        document.getElementById("main").style.height=1024+"px";
+        document.getElementById("main").style.transform="scale("+cx/1024+","+cy/1024+")";
+        var positions = [-1.0, -1.0, 0.0, 1.0, -1.0, 0.0, 1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, 1.0, 0.0, -1.0, 1.0, 0.0];
+        var VSHADER_SOURCE =
+            "#version 100 \n"+
+            "precision highp float;\n" +
+            "attribute vec4 position;" +
+            "varying vec3 dir, localdir;" +
+            "uniform vec3 right, forward, up, origin;" +
+            "uniform float x,y;" +
+            "void main() {" +
+            "   gl_Position = position; " +
+            "   dir = forward + right * position.x*x + up * position.y*y;" +
+            "   localdir.x = position.x*x;" +
+            "   localdir.y = position.y*y;" +
+            "   localdir.z = -1.0;" +
+            "} ";
+        var FSHADER_SOURCE =
+            "#version 100 \n" +
+            "#define PI 3.14159265358979324\n" +
+            "#define M_L 0.3819660113\n" +
+            "#define M_R 0.6180339887\n" +
+            "#define MAXR 8\n" +
+            "#define SOLVER 8\n" +
+            "precision highp float;\n" +
+            "float kernal(vec3 ver)\n;" +
+            "uniform vec3 right, forward, up, origin;\n" +
+            "varying vec3 dir, localdir;\n" +
+            "uniform float len;\n" +
+            "vec3 ver;\n" +
+            "int sign;"+
+            "float v, v1, v2;\n" +
+            "float r1, r2, r3, r4, m1, m2, m3, m4;\n" +
+            "vec3 n, reflect;\n" +
+            "const float step = 0.002;\n" +
+            "vec3 color;\n" +
+            "void main() {\n" +
+            "   color.r=0.0;\n" +
+            "   color.g=0.0;\n" +
+            "   color.b=0.0;\n" +
+            "   sign=0;"+
+            "   v1 = kernal(origin + dir * (step*len));\n" +
+            "   v2 = kernal(origin);\n" +
+            "   for (int k = 2; k < 1002; k++) {\n" +
+            "      ver = origin + dir * (step*len*float(k));\n" +
+            "      v = kernal(ver);\n" +
+            "      if (v > 0.0 && v1 < 0.0) {\n" +
+            "         r1 = step * len*float(k - 1);\n" +
+            "         r2 = step * len*float(k);\n" +
+            "         m1 = kernal(origin + dir * r1);\n" +
+            "         m2 = kernal(origin + dir * r2);\n" +
+            "         for (int l = 0; l < SOLVER; l++) {\n" +
+            "            r3 = r1 * 0.5 + r2 * 0.5;\n" +
+            "            m3 = kernal(origin + dir * r3);\n" +
+            "            if (m3 > 0.0) {\n" +
+            "               r2 = r3;\n" +
+            "               m2 = m3;\n" +
+            "            }\n" +
+            "            else {\n" +
+            "               r1 = r3;\n" +
+            "               m1 = m3;\n" +
+            "            }\n" +
+            "         }\n" +
+            "         if (r3 < 2.0 * len) {\n" +
+            "               sign=1;" +
+            "            break;\n" +
+            "         }\n" +
+            "      }\n" +
+            "      if (v < v1&&v1>v2&&v1 < 0.0 && (v1*2.0 > v || v1 * 2.0 > v2)) {\n" +
+            "         r1 = step * len*float(k - 2);\n" +
+            "         r2 = step * len*(float(k) - 2.0 + 2.0*M_L);\n" +
+            "         r3 = step * len*(float(k) - 2.0 + 2.0*M_R);\n" +
+            "         r4 = step * len*float(k);\n" +
+            "         m2 = kernal(origin + dir * r2);\n" +
+            "         m3 = kernal(origin + dir * r3);\n" +
+            "         for (int l = 0; l < MAXR; l++) {\n" +
+            "            if (m2 > m3) {\n" +
+            "               r4 = r3;\n" +
+            "               r3 = r2;\n" +
+            "               r2 = r4 * M_L + r1 * M_R;\n" +
+            "               m3 = m2;\n" +
+            "               m2 = kernal(origin + dir * r2);\n" +
+            "            }\n" +
+            "            else {\n" +
+            "               r1 = r2;\n" +
+            "               r2 = r3;\n" +
+            "               r3 = r4 * M_R + r1 * M_L;\n" +
+            "               m2 = m3;\n" +
+            "               m3 = kernal(origin + dir * r3);\n" +
+            "            }\n" +
+            "         }\n" +
+            "         if (m2 > 0.0) {\n" +
+            "            r1 = step * len*float(k - 2);\n" +
+            "            r2 = r2;\n" +
+            "            m1 = kernal(origin + dir * r1);\n" +
+            "            m2 = kernal(origin + dir * r2);\n" +
+            "            for (int l = 0; l < SOLVER; l++) {\n" +
+            "               r3 = r1 * 0.5 + r2 * 0.5;\n" +
+            "               m3 = kernal(origin + dir * r3);\n" +
+            "               if (m3 > 0.0) {\n" +
+            "                  r2 = r3;\n" +
+            "                  m2 = m3;\n" +
+            "               }\n" +
+            "               else {\n" +
+            "                  r1 = r3;\n" +
+            "                  m1 = m3;\n" +
+            "               }\n" +
+            "            }\n" +
+            "            if (r3 < 2.0 * len&&r3> step*len) {\n" +
+            "                   sign=1;" +
+            "               break;\n" +
+            "            }\n" +
+            "         }\n" +
+            "         else if (m3 > 0.0) {\n" +
+            "            r1 = step * len*float(k - 2);\n" +
+            "            r2 = r3;\n" +
+            "            m1 = kernal(origin + dir * r1);\n" +
+            "            m2 = kernal(origin + dir * r2);\n" +
+            "            for (int l = 0; l < SOLVER; l++) {\n" +
+            "               r3 = r1 * 0.5 + r2 * 0.5;\n" +
+            "               m3 = kernal(origin + dir * r3);\n" +
+            "               if (m3 > 0.0) {\n" +
+            "                  r2 = r3;\n" +
+            "                  m2 = m3;\n" +
+            "               }\n" +
+            "               else {\n" +
+            "                  r1 = r3;\n" +
+            "                  m1 = m3;\n" +
+            "               }\n" +
+            "            }\n" +
+            "            if (r3 < 2.0 * len&&r3> step*len) {\n" +
+            "                   sign=1;" +
+            "               break;\n" +
+            "            }\n" +
+            "         }\n" +
+            "      }\n" +
+            "      v2 = v1;\n" +
+            "      v1 = v;\n" +
+            "   }\n" +
+            "   if (sign==1) {\n" +
+            "      ver = origin + dir*r3 ;\n" +
+                "       r1=ver.x*ver.x+ver.y*ver.y+ver.z*ver.z;" +
+            "      n.x = kernal(ver - right * (r3*0.00025)) - kernal(ver + right * (r3*0.00025));\n" +
+            "      n.y = kernal(ver - up * (r3*0.00025)) - kernal(ver + up * (r3*0.00025));\n" +
+            "      n.z = kernal(ver + forward * (r3*0.00025)) - kernal(ver - forward * (r3*0.00025));\n" +
+            "      r3 = n.x*n.x+n.y*n.y+n.z*n.z;\n" +
+            "      n = n * (1.0 / sqrt(r3));\n" +
+            "      ver = localdir;\n" +
+            "      r3 = ver.x*ver.x+ver.y*ver.y+ver.z*ver.z;\n" +
+            "      ver = ver * (1.0 / sqrt(r3));\n" +
+            "      reflect = n * (-2.0*dot(ver, n)) + ver;\n" +
+            "      r3 = reflect.x*0.276+reflect.y*0.920+reflect.z*0.276;\n" +
+            "      r4 = n.x*0.276+n.y*0.920+n.z*0.276;\n" +
+            "      r3 = max(0.0,r3);\n" +
+            "      r3 = r3 * r3*r3*r3;\n" +
+            "      r3 = r3 * 0.45 + r4 * 0.25 + 0.3;\n" +
+                "      n.x = sin(r1*10.0)*0.5+0.5;\n" +
+                "      n.y = sin(r1*10.0+2.05)*0.5+0.5;\n" +
+                "      n.z = sin(r1*10.0-2.05)*0.5+0.5;\n" +
+            "      color = n*r3;\n" +
+            "   }\n" +
+            "   gl_FragColor = vec4(color.x, color.y, color.z, 1.0);" +
+            "}";
+        canvas = document.getElementById('c1');
+        gl = canvas.getContext('webgl');
+        vertshader = gl.createShader(gl.VERTEX_SHADER);
+        fragshader = gl.createShader(gl.FRAGMENT_SHADER);
+        shaderProgram = gl.createProgram();
+        gl.shaderSource(vertshader, VSHADER_SOURCE);
+        gl.compileShader(vertshader);
+        var infov = gl.getShaderInfoLog(vertshader);
+        gl.shaderSource(fragshader, FSHADER_SOURCE + KERNEL);
+        gl.compileShader(fragshader);
+        var infof = gl.getShaderInfoLog(fragshader);
+        gl.attachShader(shaderProgram, vertshader);
+        gl.attachShader(shaderProgram, fragshader);
+        gl.linkProgram(shaderProgram);
+        gl.useProgram(shaderProgram);
+        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+            var info = gl.getProgramInfoLog(shaderProgram);
+            throw 'Could not compile WebGL program. \n\n' + infov + infof + info;
+        }
+        glposition = gl.getAttribLocation(shaderProgram, 'position');
+        glright = gl.getUniformLocation(shaderProgram, 'right');
+        glforward = gl.getUniformLocation(shaderProgram, 'forward');
+        glup = gl.getUniformLocation(shaderProgram, 'up');
+        glorigin = gl.getUniformLocation(shaderProgram, 'origin');
+        glx = gl.getUniformLocation(shaderProgram, 'x');
+        gly = gl.getUniformLocation(shaderProgram, 'y');
+        gllen = gl.getUniformLocation(shaderProgram, 'len');
+        var buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+        gl.vertexAttribPointer(glposition, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(glposition);
 
-        // Inicializar todos los efectos
-        createAggressiveNoise();
-        extremeRandomGlitch();
-        rgbFlash();
-        viewportGlitch();
-        autoClosePage();
-
-        // Regenerar bloques constantemente para máximo caos
-        setInterval(() => {
-            document.getElementById('blockNoise').innerHTML = '';
-            createAggressiveNoise();
-        }, 500);
+        gl.viewport(0, 0, 1024, 1024);
+        draw();
+        window.requestAnimationFrame(ontimer);
+        document.getElementById("kernel").value = KERNEL;
+        document.getElementById("btn").addEventListener("click", function() {
+            var state = this.innerText == "CONFIG";
+            this.innerText = state ? "HIDE" : "CONFIG";
+            document.getElementById("config").style.display = state ? "inline" : "none";
+        });
+        document.getElementById("apply").addEventListener("click", function() {
+            KERNEL = document.getElementById("kernel").value;
+            gl.shaderSource(fragshader, FSHADER_SOURCE + KERNEL);
+            gl.compileShader(fragshader);
+            var infof = gl.getShaderInfoLog(fragshader);
+            gl.linkProgram(shaderProgram);
+            gl.useProgram(shaderProgram);
+            if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+                var info = gl.getProgramInfoLog(shaderProgram);
+                alert(infof + info);
+            }
+            glposition = gl.getAttribLocation(shaderProgram, 'position');
+            glright = gl.getUniformLocation(shaderProgram, 'right');
+            glforward = gl.getUniformLocation(shaderProgram, 'forward');
+            glup = gl.getUniformLocation(shaderProgram, 'up');
+            glorigin = gl.getUniformLocation(shaderProgram, 'origin');
+            glx = gl.getUniformLocation(shaderProgram, 'x');
+            gly = gl.getUniformLocation(shaderProgram, 'y');
+            gllen = gl.getUniformLocation(shaderProgram, 'len');
+        });
+        document.getElementById("cancle").addEventListener("click", function() {
+            document.getElementById("kernel").value = KERNEL;
+        });
+    }
     </script>
 </body>
 </html>
